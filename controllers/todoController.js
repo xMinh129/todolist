@@ -11,29 +11,28 @@ var todoSchema = new mongoose.Schema({
 //Create a model in the schema, similar to that in Rails
 var Todo = mongoose.model('Todo',todoSchema);
 /* Testing DB
+//var data =[{item: 'buy milk'},{item:'buy soda'}];
 var itemOne = Todo({item: 'buy flower'}).save(function(err){
   if (err) throw err;
   console.log('Item saved');
 });
 */
 //export controller module
-var data =[{item: 'buy milk'},{item:'buy soda'}];
 module.exports = function(app){
 
 app.get('/todo', function(req,res){
   //get all the dab from mongodb and pass it, if error throw error, else render data
-  //Todo.find({}, function(err,data){
-    //if(err) throw err;
+  Todo.find({}, function(err,data){
+    if(err) throw err;
     res.render('todo', {todos: data});
-  //});
+  });
 });
 app.post('/todo',urlencodedParser, function(req, res){
   //creating a new record in todo, parse the data from the view
-  //var newTodo = Todo(req.body).save(function(err, data){
-    data.push(req.body);
+  var newTodo = Todo(req.body).save(function(err, data){
     console.log('Item saved');
     res.json(data);
-  //});
+  });
 
 });
 app.delete('todo/:item',function(req,res){
